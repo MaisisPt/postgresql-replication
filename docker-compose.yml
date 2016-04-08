@@ -1,28 +1,31 @@
-master:
-  image: 'dw/postgresql-master'
-  restart: 'always'
-  environment:
-    PGUSER: 'postgres'
-    PGPASSWORD: 'postgres'
-    PGDATA: '/var/lib/postgresql/data/pgdata'
-  volumes:
-   - '/var/lib/postgresql/data'
-  expose:
-   - '5432:5432'
-  ports:
-   - '5432:5432'
+version: '2'
 
-slave:
-  image: 'dw/postgresql-slave'
-  restart: 'always'
-  environment:
-    PGUSER: 'postgres'
-    PGPASSWORD: 'postgres'
-    PGDATA: '/var/lib/postgresql/data/pgdata'
-    REPLICATE_FROM: 'master'
-  volumes:
-   - '/var/lib/postgresql/data'
-  expose:
-   - '5432'
-  links:
-   - 'master'
+services:
+  master:
+    image: 'dw/postgresql-master'
+    restart: 'always'
+    environment:
+      PGUSER: 'postgres'
+      PGPASSWORD: 'postgres'
+      PGDATA: '/var/lib/postgresql/data/pgdata'
+    volumes:
+     - '/var/lib/postgresql/data'
+    expose:
+     - '5432'
+    ports:
+     - '5432:5432'
+  
+  slave:
+    image: 'dw/postgresql-slave'
+    restart: 'always'
+    environment:
+      PGUSER: 'postgres'
+      PGPASSWORD: 'postgres'
+      PGDATA: '/var/lib/postgresql/data/pgdata'
+      REPLICATE_FROM: 'master'
+    volumes:
+     - '/var/lib/postgresql/data'
+    expose:
+     - '5432'
+    links:
+     - 'master'
